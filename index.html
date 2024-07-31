@@ -61,7 +61,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"inner.icu","root":"/","version":"1.9.8","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"shell"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"inner.icu","root":"/","version":"1.9.8","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"shell"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -224,18 +224,24 @@
   <div class="row mx-auto index-card">
     
     
-    <article class="col-12 col-md-12 mx-auto index-info">
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/08/01/%E8%99%9A%E6%8B%9F%E6%9C%BALinux%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9/" target="_self">
+          <img src="https://img.inner.icu/file/9ef129e185d5e531b3cde.png" srcset="/img/loading.gif" lazyload alt="虚拟机Linux磁盘扩容">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/07/31/%E8%99%9A%E6%8B%9F%E6%9C%BALinux%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9/" target="_self">
+        <a href="/2024/08/01/%E8%99%9A%E6%8B%9F%E6%9C%BALinux%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9/" target="_self">
           虚拟机Linux磁盘扩容
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/07/31/%E8%99%9A%E6%8B%9F%E6%9C%BALinux%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9/" target="_self">
+      <a class="index-excerpt " href="/2024/08/01/%E8%99%9A%E6%8B%9F%E6%9C%BALinux%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9/" target="_self">
         <div>
-          场景esxi下直接调整虚拟磁盘大小，guest系统内新增容量不生效，需要手动调整硬盘分区表、执行文件系统扩容。 步骤1. 调整虚拟磁盘大小 2. 确认guest系统已识别到新的磁盘容量1234567891011121314151617181920212223[root@gitlab ~]# fdisk -lDisk /dev/sda: 107.4 GB, 107374182400 bytes,
+          场景esxi下直接调整虚拟磁盘大小，guest系统内新增容量不生效，需要手动调整硬盘分区表、执行文件系统扩容。 步骤1. 调整虚拟磁盘大小 2. 确认guest系统已识别到新的磁盘容量[root@gitlab ~]# fdisk -l  Disk /dev/sda: 107.4 GB, 107374182400 bytes, 209715200 sectors Units = sectors o
         </div>
       </a>
 
@@ -243,12 +249,104 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-07-31 15:12" pubdate>
-              2024-07-31
+            <time datetime="2024-08-01 00:12" pubdate>
+              2024-08-01
             </time>
           </div>
         
         
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/07/01/wordpress%E5%BB%BA%E7%AB%99/" target="_self">
+          <img src="https://img.inner.icu/file/78e6061d3dbe31fd9f6e2.gif" srcset="/img/loading.gif" lazyload alt="外贸建站：WordPress搭建外贸独立站零基础自建站完整教程（2024）">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/07/01/wordpress%E5%BB%BA%E7%AB%99/" target="_self">
+          外贸建站：WordPress搭建外贸独立站零基础自建站完整教程（2024）
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/07/01/wordpress%E5%BB%BA%E7%AB%99/" target="_self">
+        <div>
+          外贸建站：WordPress搭建外贸独立站零基础自建站完整教程（2024）对于做外贸来说，拥有自己的外贸独立网站真的非常重要。在外贸领域，如今各平台竞争激烈，规则多，成本高，价格战、政策变化快，还存在封店风险等等因素。在这种情况下，拥有外贸独立站就能很好规避上面所提到的弊端。正如你可以不用，但不能没有。而非二选一，就好比左右腿相辅相成一样，平台和独立站两者共同发展才能走得更稳健。 然而，对那些想做
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-07-01 00:52" pubdate>
+              2024-07-01
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E8%B7%A8%E5%A2%83%E7%94%B5%E5%95%86/">#跨境电商</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/06/01/test1/" target="_self">
+          <img src="https://img.inner.icu/file/4a606ec00a1a2c4039336.png" srcset="/img/loading.gif" lazyload alt="Web3-quilibrium币挖矿节点部署">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/06/01/test1/" target="_self">
+          Web3-quilibrium币挖矿节点部署
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/06/01/test1/" target="_self">
+        <div>
+          Qui项目官方链接：https://quilibrium.com/ windows安装wsl2wsl –set-default-version 2 wsl –install -d Ubuntu-22.04 设置nds 4.2.2.2 win10内核安装包 更改清华源 vi &#x2F;etc&#x2F;apt&#x2F;sources.list esc gg VG delete 粘贴 deb ht
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-06-01 00:39" pubdate>
+              2024-06-01
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/web3/">#web3</a>
+            
+          </div>
         
       </div>
     </article>
