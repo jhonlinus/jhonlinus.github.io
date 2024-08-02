@@ -299,7 +299,7 @@ MaxRequestWorkers 250
 
 MaxConnectionsPerChild 1000
 
-&lt;&#x2F;IfModule&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+&lt;&#x2F;IfModule&gt;</code></pre></div></figure>
 
 <p>显示详细信息</p>
 <p>StartServers 服务器启动时建立的子进程数量，prefork默认是5，</p>
@@ -328,7 +328,7 @@ MaxRequestWorkers 400
 
 MaxConnectionsPerChild 1000
 
-&lt;&#x2F;IfModule&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+&lt;&#x2F;IfModule&gt;</code></pre></div></figure>
 
 <p>显示详细信息</p>
 <p>StartServers 服务器启动时建立的子进程数量,在workers模式下默认是3.配置参数解释：</p>
@@ -361,7 +361,7 @@ MaxRequestWorkers 400
 
 MaxConnectionsPerChild 1000
 
-&lt;&#x2F;IfModule&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+&lt;&#x2F;IfModule&gt;</code></pre></div></figure>
 
 <p>显示详细信息</p>
 <p>event 模式与 worker 模式完全一样，参考 worker 模式参数即可，这里不再重复。</p>
@@ -391,7 +391,7 @@ MaxConnectionsPerChild 1000
 
   LogLevel http2:info
 
-&lt;&#x2F;IfModule&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+&lt;&#x2F;IfModule&gt;</code></pre></div></figure>
 
 <p>欧克，这个时候，你就可以保存配置用httpd -t测试配置，没有问题重新加载配置，就可以看到你的Apache已经启用h2了</p>
 
@@ -646,6 +646,10 @@ MaxConnectionsPerChild 1000
   });
 </script>
 
+
+  <script  src="https://lib.baomitu.com/prism/1.29.0/components/prism-core.min.js" ></script>
+
+  <script  src="https://lib.baomitu.com/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" ></script>
 
   <script  src="https://lib.baomitu.com/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
 

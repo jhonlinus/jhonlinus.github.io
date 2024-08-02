@@ -227,7 +227,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          478 字
+          483 字
         
       </span>
     
@@ -238,7 +238,7 @@
         
         
         
-          4 分钟
+          5 分钟
         
       </span>
     
@@ -284,19 +284,19 @@
 <p>配置 若想调试远端web容器内部的应用，需要接入web容器的jvm，以Tomcat为例，需修改web容器的配置 &#x2F;&#x2F; bin\startup.bat（.sh）文件，在里面添加 &#x2F;&#x2F; windows set CATALINA_OPTS&#x3D;”-agentlib:jdwp&#x3D;transport&#x3D;dt_socket,address&#x3D;8888（自定义调试端口）,server…</p>
 <p>首先，打开Edit configurations，点击 + 号，创建一个Remote应用。</p>
 <p>step1 填写name，配置Host地址（远程服务器地址）和端口（选一个未被占用的端口，然后复制Command line arguments for remote JVM 下面的参数,示例配置的端口为5005:</p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token parameter variable">-agentlib:jdwp</span><span class="token operator">=</span>transport<span class="token operator">=</span>dt_socket,server<span class="token operator">=</span>y,suspend<span class="token operator">=</span>n,address<span class="token operator">=</span><span class="token number">5005</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">-agentlib:jdwp&#x3D;transport&#x3D;dt_socket,server&#x3D;y,suspend&#x3D;n,address&#x3D;5005</code></pre></div></figure>
 
 <p>step2 这里是可选的，选择对应的jdk即可。</p>
 <p>step2 经过以上步骤，已经获得了启动远程服务器的参数。在启动springboot时默认使用java命令来启动。</p>
 <p>比如，示例项目启动命令为：</p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">nohup java -server -Xms492M -Xmx492M -jar wool-1.0.0.jar &amp;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">nohup java -server -Xms492M -Xmx492M -jar wool-1.0.0.jar &amp;</code></pre></div></figure>
 
 <p>那么此时在启动命令上添加上面获得的参数：</p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">nohup java -agentlib:jdwp&#x3D;transport&#x3D;dt_socket,server&#x3D;y,suspend&#x3D;n,address&#x3D;5005 -server -Xms492M -Xmx492M -jar wool-1.0.0.jar &amp;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">nohup java -agentlib:jdwp&#x3D;transport&#x3D;dt_socket,server&#x3D;y,suspend&#x3D;n,address&#x3D;5005 -server -Xms492M -Xmx492M -jar wool-1.0.0.jar &amp;</code></pre></div></figure>
 
 <p>这样服务端就监听在5005端口了。可以通过以下命令来检查是否监听成功：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">[root@izbp1c4fgtbk4x56zra24jz springboot]# netstat -anp | grep 5005
-tcp        0    750 10.1.0.83:5005          11.167.22.247:56153   ESTABLISHED 32474&#x2F;java<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+tcp        0    750 10.1.0.83:5005          11.167.22.247:56153   ESTABLISHED 32474&#x2F;java</code></pre></div></figure>
 
 <p>出现上述打印，说明监听成功。</p>
 <p>但如果是部署在云服务器上，记得检查一下是否配置了相应的安全组，不然还是连接不到这个端口的。</p>
@@ -555,6 +555,10 @@ tcp        0    750 10.1.0.83:5005          11.167.22.247:56153   ESTABLISHED 32
   });
 </script>
 
+
+  <script  src="https://lib.baomitu.com/prism/1.29.0/components/prism-core.min.js" ></script>
+
+  <script  src="https://lib.baomitu.com/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" ></script>
 
   <script  src="https://lib.baomitu.com/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
 
