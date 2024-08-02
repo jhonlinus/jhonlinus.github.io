@@ -227,7 +227,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          399 字
+          395 字
         
       </span>
     
@@ -286,10 +286,15 @@
 <p>容易出现中文注释时候无法编译通过，或者出现乱码，找了几天的解决方法终于解决了。</p>
 <p>这个问题的奇葩之处在于在xp环境中没有任何问题，只是在windows7环境中才出现的这个。</p>
 <p>sass编译时候出现如下错误的解决方法：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">Syntax error: Invalid GBK character &quot;\xE5&quot;<br>on line 8 of E:\work\sass\sass\_big_box.scss<br>from line 16 of E:\work\sass\sass\main.scss<br>Use --trace for backtrace.<br></code></pre></td></tr></table></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Syntax error: Invalid GBK character <span class="token string">"<span class="token entity" title="\xE5">\xE5</span>"</span>
+on line <span class="token number">8</span> of E:<span class="token punctuation">\</span>work<span class="token punctuation">\</span>sass<span class="token punctuation">\</span>sass<span class="token punctuation">\</span>_big_box.scss
+from line <span class="token number">16</span> of E:<span class="token punctuation">\</span>work<span class="token punctuation">\</span>sass<span class="token punctuation">\</span>sass<span class="token punctuation">\</span>main.scss
+Use <span class="token parameter variable">--trace</span> <span class="token keyword">for</span> backtrace.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 
 <p>或者</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">Syntax error: Invalid GBK character &quot;\xE5&quot;<br>on line 2 of E:\work\sass\sass\main.scss<br>Use --trace for backtrace.<br></code></pre></td></tr></table></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Syntax error: Invalid GBK character <span class="token string">"<span class="token entity" title="\xE5">\xE5</span>"</span>
+on line <span class="token number">2</span> of E:<span class="token punctuation">\</span>work<span class="token punctuation">\</span>sass<span class="token punctuation">\</span>sass<span class="token punctuation">\</span>main.scss
+Use <span class="token parameter variable">--trace</span> <span class="token keyword">for</span> backtrace.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
 
 <p>解决办法：</p>
 <p>1.koala可视化编译工具</p>
