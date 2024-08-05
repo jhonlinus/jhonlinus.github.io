@@ -46,8 +46,6 @@
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" />
-
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
 
@@ -286,15 +284,10 @@
 <p>容易出现中文注释时候无法编译通过，或者出现乱码，找了几天的解决方法终于解决了。</p>
 <p>这个问题的奇葩之处在于在xp环境中没有任何问题，只是在windows7环境中才出现的这个。</p>
 <p>sass编译时候出现如下错误的解决方法：</p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Syntax error: Invalid GBK character &quot;\xE5&quot;
-on line 8 of E:\work\sass\sass\_big_box.scss
-from line 16 of E:\work\sass\sass\main.scss
-Use --trace for backtrace.</code></pre></div></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">Syntax error: Invalid GBK character &quot;\xE5&quot;<br>on line 8 of E:\work\sass\sass\_big_box.scss<br>from line 16 of E:\work\sass\sass\main.scss<br>Use --trace for backtrace.<br></code></pre></td></tr></table></figure>
 
 <p>或者</p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Syntax error: Invalid GBK character &quot;\xE5&quot;
-on line 2 of E:\work\sass\sass\main.scss
-Use --trace for backtrace.</code></pre></div></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">Syntax error: Invalid GBK character &quot;\xE5&quot;<br>on line 2 of E:\work\sass\sass\main.scss<br>Use --trace for backtrace.<br></code></pre></td></tr></table></figure>
 
 <p>解决办法：</p>
 <p>1.koala可视化编译工具</p>
@@ -560,12 +553,6 @@ Use --trace for backtrace.</code></pre></div></figure>
   });
 </script>
 
-
-  <script  src="https://lib.baomitu.com/prism/1.29.0/components/prism-core.min.js" ></script>
-
-  <script  src="https://lib.baomitu.com/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" ></script>
-
-  <script  src="https://lib.baomitu.com/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
 
   <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
 

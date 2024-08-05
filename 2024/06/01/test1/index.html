@@ -19,12 +19,12 @@
   <meta name="author" content="Linus Jhon">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Qui项目官方链接：https:&#x2F;&#x2F;quilibrium.com&#x2F; windows安装wsl2wsl –set-default-version 2 wsl –install -d Ubuntu-22.04 设置nds 4.2.2.2 win10内核安装包 更改清华源 vi &#x2F;etc&#x2F;apt&#x2F;sources.list esc gg VG delete 粘贴 deb ht">
+    <meta name="description" content="Qui项目官方链接：https:&#x2F;&#x2F;quilibrium.com&#x2F; windows安装wsl2wsl –set-default-version 2 wsl –install -d Ubuntu-22.04 设置nds 4.2.2.2 win10内核安装包 更改清华源 vi &#x2F;etc&#x2F;apt&#x2F;sources.list esc gg VG delete 粘贴 1deb h">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Web3-quilibrium币挖矿节点部署">
 <meta property="og:url" content="http://inner.icu/2024/06/01/test1/index.html">
 <meta property="og:site_name" content="内云居">
-<meta property="og:description" content="Qui项目官方链接：https:&#x2F;&#x2F;quilibrium.com&#x2F; windows安装wsl2wsl –set-default-version 2 wsl –install -d Ubuntu-22.04 设置nds 4.2.2.2 win10内核安装包 更改清华源 vi &#x2F;etc&#x2F;apt&#x2F;sources.list esc gg VG delete 粘贴 deb ht">
+<meta property="og:description" content="Qui项目官方链接：https:&#x2F;&#x2F;quilibrium.com&#x2F; windows安装wsl2wsl –set-default-version 2 wsl –install -d Ubuntu-22.04 设置nds 4.2.2.2 win10内核安装包 更改清华源 vi &#x2F;etc&#x2F;apt&#x2F;sources.list esc gg VG delete 粘贴 1deb h">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img.inner.icu/file/4a606ec00a1a2c4039336.png">
 <meta property="article:published_time" content="2024-05-31T16:39:49.000Z">
@@ -45,8 +45,6 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
@@ -227,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          241 字
+          205 字
         
       </span>
     
@@ -238,7 +236,7 @@
         
         
         
-          3 分钟
+          2 分钟
         
       </span>
     
@@ -288,7 +286,7 @@
 <p><strong>更改清华源</strong></p>
 <p><strong>vi &#x2F;etc&#x2F;apt&#x2F;sources.list</strong></p>
 <p>esc gg VG delete 粘贴</p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">deb https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;ubuntu&#x2F; noble main restricted universe multiverse deb-src https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;ubuntu&#x2F; noble main restricted universe multiverse deb https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;ubuntu&#x2F; noble-updates main restricted universe multiverse deb-src https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;ubuntu&#x2F; noble-updates main restricted universe multiverse deb https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;ubuntu&#x2F; noble-backports main restricted universe multiverse deb-src https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;ubuntu&#x2F; noble-backports main restricted universe multiverse</code></pre></div></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">deb https:<span class="hljs-regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="hljs-regexp">/ubuntu/</span> noble main restricted universe multiverse deb-src https:<span class="hljs-regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="hljs-regexp">/ubuntu/</span> noble main restricted universe multiverse deb https:<span class="hljs-regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="hljs-regexp">/ubuntu/</span> noble-updates main restricted universe multiverse deb-src https:<span class="hljs-regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="hljs-regexp">/ubuntu/</span> noble-updates main restricted universe multiverse deb https:<span class="hljs-regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="hljs-regexp">/ubuntu/</span> noble-backports main restricted universe multiverse deb-src https:<span class="hljs-regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="hljs-regexp">/ubuntu/</span> noble-backports main restricted universe multiverse<br></code></pre></td></tr></table></figure>
 
 <h1 id="linux安装go"><a href="#linux安装go" class="headerlink" title="linux安装go"></a>linux安装go</h1><hr>
 <p>wget <a target="_blank" rel="noopener" href="https://dl.google.com/go/go1.20.14.linux-amd64.tar.gz">https://dl.google.com/go/go1.20.14.linux-amd64.tar.gz</a></p>
@@ -304,13 +302,10 @@
 <p><strong>查看余额</strong></p>
 <p>go run .&#x2F;… -balance</p>
 <p><strong>grpc端口配置</strong></p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">listenMultiaddr: &#x2F;ip4&#x2F;127.0.0.1&#x2F;tcp&#x2F;8336 
-listenGrpcMultiaddr: &quot;&#x2F;ip4&#x2F;127.0.0.1&#x2F;tcp&#x2F;8337&quot; 
-listenRESTMultiaddr: &quot;&#x2F;ip4&#x2F;127.0.0.1&#x2F;tcp&#x2F;8338&quot;</code></pre></div></figure>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">listenMultiaddr:</span> <span class="hljs-keyword">/ip4/</span><span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span><span class="hljs-keyword">/tcp/</span><span class="hljs-number">8336</span> <br><span class="hljs-symbol">listenGrpcMultiaddr:</span> <span class="hljs-string">&quot;/ip4/127.0.0.1/tcp/8337&quot;</span> <br><span class="hljs-symbol">listenRESTMultiaddr:</span> <span class="hljs-string">&quot;/ip4/127.0.0.1/tcp/8338&quot;</span><br></code></pre></td></tr></table></figure>
 
 <p><strong>内存限制</strong></p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">engine:
-dataWorkerMemoryLimit: 1024000000</code></pre></div></figure>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">engine:</span><br><span class="hljs-symbol">dataWorkerMemoryLimit:</span> <span class="hljs-number">1024000000</span><br></code></pre></td></tr></table></figure>
 
 <p><strong>grpcurl查看peer-id</strong></p>
 <p>grpcurl -plaintext localhost:8337 quilibrium.node.node.pb.NodeService.GetNodeInfo</p>
@@ -575,12 +570,6 @@ dataWorkerMemoryLimit: 1024000000</code></pre></div></figure>
   });
 </script>
 
-
-  <script  src="https://lib.baomitu.com/prism/1.29.0/components/prism-core.min.js" ></script>
-
-  <script  src="https://lib.baomitu.com/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" ></script>
-
-  <script  src="https://lib.baomitu.com/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
 
   <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
 
