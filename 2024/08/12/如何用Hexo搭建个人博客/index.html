@@ -291,10 +291,10 @@
 <p><em>(这里有一篇详细安装教程<a target="_blank" rel="noopener" href="https://www.cnblogs.com/xueweisuoyong/p/11914045.html">文章链接</a>，可以不看)</em></p>
 <p><strong>接下来我们测试下是否都下载成功</strong></p>
 <p>管理员运行cmd，依次输入</p>
-<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">node</span> <span class="title">-v</span></span><br><span class="line">npm -v（这个是<span class="keyword">node</span><span class="title">附带的）</span></span><br><span class="line"><span class="title">git</span> -v</span><br></pre></td></tr></table></figure>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs crmsh"><span class="hljs-keyword">node</span> <span class="hljs-title">-v</span><br>npm -v（这个是<span class="hljs-keyword">node</span><span class="hljs-title">附带的）</span><br><span class="hljs-title">git</span> -v<br></code></pre></td></tr></table></figure>
 
 <p><strong>下载hexo</strong></p>
-<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-<span class="keyword">cli</span> -g</span><br></pre></td></tr></table></figure>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs avrasm">npm install hexo-<span class="hljs-keyword">cli</span> -g<br></code></pre></td></tr></table></figure>
 
 
 
@@ -302,13 +302,13 @@
 <p>首先注册&#x2F;登入<a target="_blank" rel="noopener" href="https://github.com/">Github</a></p>
 <p>点击Create a new repository进入新建仓库页面</p>
 <p>仓库名输入：</p>
-<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用户名<span class="string">.github.io</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">用户名<span class="hljs-string">.github.io</span><br></code></pre></td></tr></table></figure>
 
 <p>勾选 Public</p>
 <p>勾选 Add a README file</p>
 <p>拉到下面点击create创建</p>
 <h2 id="生成SSH-Keys"><a href="#生成SSH-Keys" class="headerlink" title="生成SSH Keys"></a>生成SSH Keys</h2><p>进入任意文件夹，右键空白处然后点Git bash here,输入</p>
-<figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -<span class="built_in">t</span> rsa -C <span class="string">&quot;邮件地址&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs excel">ssh-keygen -<span class="hljs-built_in">t</span> rsa -C <span class="hljs-string">&quot;邮件地址&quot;</span><br></code></pre></td></tr></table></figure>
 
 <p>然后敲4次Enter⌨️</p>
 <p>然后进入C:\Users\用户名，在里面进入.ssh文件</p>
@@ -319,12 +319,12 @@
 <p>然后创建</p>
 <p><strong>测试是否成功</strong></p>
 <p>在git bash中输入</p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">ssh</span> -T git<span class="variable">@github</span>.com</span><br></pre></td></tr></table></figure>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">ssh</span> -T git<span class="hljs-variable">@github</span>.com<br></code></pre></td></tr></table></figure>
 
 <p>回车，然后再输入yes</p>
 <h2 id="本地生成博客内容"><a href="#本地生成博客内容" class="headerlink" title="本地生成博客内容"></a>本地生成博客内容</h2><p>在喜欢位置新建文件Blog，然后进入文件夹</p>
 <p>右键空白处然后点Git bash here，输入</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo <span class="keyword">init</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs csharp">hexo <span class="hljs-keyword">init</span><br></code></pre></td></tr></table></figure>
 
 
 
@@ -332,17 +332,17 @@
 <p>如果‘command not find’，就在前面加上npx，如：<code>npx hexo init</code></p>
 </blockquote>
 <p>然后</p>
-<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo <span class="keyword">install</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">hexo <span class="hljs-keyword">install</span><br></code></pre></td></tr></table></figure>
 
 <p>接下来依次输入</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo <span class="selector-tag">g</span></span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs css">hexo <span class="hljs-selector-tag">g</span><br>hexo s<br></code></pre></td></tr></table></figure>
 
 <p>（如果不成功的话就重复直到成功，因为国内与github连接不稳定）</p>
 <p>现在就可以复制生成的链接进入浏览器看到我们生成的本地服务器了</p>
 <p>然后回到命令行，ctrl+c关闭</p>
 <h2 id="上线博客"><a href="#上线博客" class="headerlink" title="上线博客"></a>上线博客</h2><p>进入之前的Blog文件夹，用记事本打开_config.yml</p>
 <p>拉到最下面将deploy后面的全删掉，复制粘贴这段</p>
-<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">type:</span> git</span><br><span class="line"><span class="symbol">repository:</span> </span><br><span class="line"><span class="symbol">branch:</span> main</span><br></pre></td></tr></table></figure>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">type:</span> git<br><span class="hljs-symbol">repository:</span> <br><span class="hljs-symbol">branch:</span> main<br></code></pre></td></tr></table></figure>
 
 
 
@@ -354,16 +354,16 @@
 <p>然后保存退出</p>
 <p><strong>回到博客文件夹，git bash</strong></p>
 <p>安装自动部署发布工具</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">npm install hexo-deployer-git <span class="hljs-comment">--save</span><br></code></pre></td></tr></table></figure>
 
 <p>然后在Blog文件夹右键打开git bash，依次输入</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo <span class="selector-tag">g</span>（生成）</span><br><span class="line">hexo d（上传）</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs css">hexo <span class="hljs-selector-tag">g</span>（生成）<br>hexo d（上传）<br></code></pre></td></tr></table></figure>
 
 
 
 <blockquote>
 <p>如果是第一次使用git的话会需要配置</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config <span class="attr">--global</span> user<span class="selector-class">.email</span> <span class="string">&quot;你的邮箱&quot;</span></span><br><span class="line">git config <span class="attr">--global</span> user<span class="selector-class">.name</span> <span class="string">&quot;你的名字&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus">git config <span class="hljs-attr">--global</span> user<span class="hljs-selector-class">.email</span> <span class="hljs-string">&quot;你的邮箱&quot;</span><br>git config <span class="hljs-attr">--global</span> user<span class="hljs-selector-class">.name</span> <span class="hljs-string">&quot;你的名字&quot;</span><br></code></pre></td></tr></table></figure>
 
 <p>配置完后再<code>hexo d</code>上传</p>
 <p>在跳出来的窗口内进行登录</p>
@@ -374,11 +374,11 @@
 <h2 id="网站资料"><a href="#网站资料" class="headerlink" title="网站资料"></a>网站资料</h2><p>我们的博客标题还是默认的hexo，整个页面是初始默认的，接下来我们对其进行修改</p>
 <p>用记事本打开我们blog文件夹中的_config.yml文件</p>
 <p>将#Site下面按自己的需求填上</p>
-<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">## Site</span></span><br><span class="line"><span class="symbol">title:</span> 标题</span><br><span class="line"><span class="symbol">subtitle:</span> 副标题</span><br><span class="line"><span class="symbol">description:</span> 描述</span><br><span class="line"><span class="symbol">keywords:</span> 关键词</span><br><span class="line"><span class="symbol">author:</span> 站主</span><br><span class="line"><span class="symbol">language:</span> 语言（可以填写<span class="built_in">zh</span>-CN）</span><br><span class="line"><span class="symbol">timezone:</span> 时区（可以填写Asia/Shanghai）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-meta">## Site</span><br><span class="hljs-symbol">title:</span> 标题<br><span class="hljs-symbol">subtitle:</span> 副标题<br><span class="hljs-symbol">description:</span> 描述<br><span class="hljs-symbol">keywords:</span> 关键词<br><span class="hljs-symbol">author:</span> 站主<br><span class="hljs-symbol">language:</span> 语言（可以填写<span class="hljs-built_in">zh</span>-CN）<br><span class="hljs-symbol">timezone:</span> 时区（可以填写Asia/Shanghai）<br><br></code></pre></td></tr></table></figure>
 
 <p>然后保存</p>
 <h2 id="如何上传文章"><a href="#如何上传文章" class="headerlink" title="如何上传文章"></a>如何上传文章</h2><p>我们在Blog文件夹中打开git bash,输入下方代码就可以生成新的文章md文件</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo <span class="selector-tag">g</span></span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs css">hexo <span class="hljs-selector-tag">g</span><br>hexo d<br></code></pre></td></tr></table></figure>
 
 <p>文章是.md格式，在我们的Blog文件夹中的source&#x2F;_posts中</p>
 <p>推荐用Typora软件来编辑.md格式的文件</p>

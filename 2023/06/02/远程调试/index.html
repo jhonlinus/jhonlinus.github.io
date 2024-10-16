@@ -282,18 +282,18 @@
 <p>配置 若想调试远端web容器内部的应用，需要接入web容器的jvm，以Tomcat为例，需修改web容器的配置 &#x2F;&#x2F; bin\startup.bat（.sh）文件，在里面添加 &#x2F;&#x2F; windows set CATALINA_OPTS&#x3D;”-agentlib:jdwp&#x3D;transport&#x3D;dt_socket,address&#x3D;8888（自定义调试端口）,server…</p>
 <p>首先，打开Edit configurations，点击 + 号，创建一个Remote应用。</p>
 <p>step1 填写name，配置Host地址（远程服务器地址）和端口（选一个未被占用的端口，然后复制Command line arguments for remote JVM 下面的参数,示例配置的端口为5005:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005<br></code></pre></td></tr></table></figure>
 
 <p>step2 这里是可选的，选择对应的jdk即可。</p>
 <p>step2 经过以上步骤，已经获得了启动远程服务器的参数。在启动springboot时默认使用java命令来启动。</p>
 <p>比如，示例项目启动命令为：</p>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">nohup</span> java -server -Xms492M -Xmx492M -jar wool-<span class="number">1</span>.<span class="number">0</span>.<span class="number">0</span>.jar &amp;</span><br></pre></td></tr></table></figure>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">nohup</span> java -server -Xms492M -Xmx492M -jar wool-<span class="hljs-number">1</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.jar &amp;<br></code></pre></td></tr></table></figure>
 
 <p>那么此时在启动命令上添加上面获得的参数：</p>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">nohup</span> java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=<span class="number">5005</span> -server -Xms492M -Xmx492M -jar wool-<span class="number">1</span>.<span class="number">0</span>.<span class="number">0</span>.jar &amp;</span><br></pre></td></tr></table></figure>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">nohup</span> java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=<span class="hljs-number">5005</span> -server -Xms492M -Xmx492M -jar wool-<span class="hljs-number">1</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.jar &amp;<br></code></pre></td></tr></table></figure>
 
 <p>这样服务端就监听在5005端口了。可以通过以下命令来检查是否监听成功：</p>
-<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@izbp1c4fgtbk4x56zra24jz springboot]# netstat -anp | grep <span class="number">5005</span></span><br><span class="line">tcp        <span class="number">0</span>    <span class="number">750 10.1</span>.<span class="number">0.83:5005</span>          <span class="number">11.167.22.247</span>:<span class="number">56153</span>   ESTABLISHED <span class="number">32474</span>/java</span><br></pre></td></tr></table></figure>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dns">[root@izbp1c4fgtbk4x56zra24jz springboot]# netstat -anp | grep <span class="hljs-number">5005</span><br>tcp        <span class="hljs-number">0</span>    <span class="hljs-number">750 10.1</span>.<span class="hljs-number">0.83:5005</span>          <span class="hljs-number">11.167.22.247</span>:<span class="hljs-number">56153</span>   ESTABLISHED <span class="hljs-number">32474</span>/java<br></code></pre></td></tr></table></figure>
 
 <p>出现上述打印，说明监听成功。</p>
 <p>但如果是部署在云服务器上，记得检查一下是否配置了相应的安全组，不然还是连接不到这个端口的。</p>

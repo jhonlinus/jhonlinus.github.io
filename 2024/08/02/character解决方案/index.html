@@ -284,10 +284,10 @@
 <p>容易出现中文注释时候无法编译通过，或者出现乱码，找了几天的解决方法终于解决了。</p>
 <p>这个问题的奇葩之处在于在xp环境中没有任何问题，只是在windows7环境中才出现的这个。</p>
 <p>sass编译时候出现如下错误的解决方法：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax error: Invalid GBK character &quot;\xE5&quot;</span><br><span class="line">on line 8 of E:\work\sass\sass\_big_box.scss</span><br><span class="line">from line 16 of E:\work\sass\sass\main.scss</span><br><span class="line">Use --trace for backtrace.</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">Syntax error: Invalid GBK character &quot;\xE5&quot;<br>on line 8 of E:\work\sass\sass\_big_box.scss<br>from line 16 of E:\work\sass\sass\main.scss<br>Use --trace for backtrace.<br></code></pre></td></tr></table></figure>
 
 <p>或者</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax error: Invalid GBK character &quot;\xE5&quot;</span><br><span class="line">on line 2 of E:\work\sass\sass\main.scss</span><br><span class="line">Use --trace for backtrace.</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">Syntax error: Invalid GBK character &quot;\xE5&quot;<br>on line 2 of E:\work\sass\sass\main.scss<br>Use --trace for backtrace.<br></code></pre></td></tr></table></figure>
 
 <p>解决办法：</p>
 <p>1.koala可视化编译工具</p>
