@@ -1,0 +1,3 @@
+var posts=["2024/07/01/API客户端实现之Retrofit/","2024/05/15/Safari中position对-webkit-font-smoothing的影响/","2023/08/02/Apache开启HTTP2-0-SPDY支持/","2024/08/02/Spring中多线程定时计划任务/","2024/08/02/character解决方案/","2024/06/01/qui节点部署/","2024/07/01/wordpress建站/","2024/08/06/免费简单好用的内网穿透工具（ngrok、natapp），微信回调地址配置/","2024/08/12/如何用Hexo搭建个人博客/","2024/08/01/虚拟机Linux磁盘扩容/","2023/06/02/远程调试/"];function toRandomPost(){
+    pjax.loadUrl('/'+posts[Math.floor(Math.random() * posts.length)]);
+  };
