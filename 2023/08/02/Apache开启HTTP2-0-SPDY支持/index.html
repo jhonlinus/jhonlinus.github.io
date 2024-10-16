@@ -1,0 +1,669 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Linus Jhon">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Apache开启HTTP2.0&#x2F;SPDY支持 apache虽然市场份额渐渐被Nginx赶超，但其仍有Nginx取代不了的优点，特别是它的Rewrite和动态处理，是Nginx无法比拟的，很多人说Apache无法承载高并发，其实Apache在2.4的版本中，采用了Event MPM的工作模式，对于处理高并发有了很高的提升。但是，如果你是需要用到反向代理和很大的高并发项目；或者用低配置的特价">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Apache开启HTTP2.0&#x2F;SPDY支持">
+<meta property="og:url" content="http://inner.icu/2023/08/02/Apache%E5%BC%80%E5%90%AFHTTP2-0-SPDY%E6%94%AF%E6%8C%81/index.html">
+<meta property="og:site_name" content="内云居">
+<meta property="og:description" content="Apache开启HTTP2.0&#x2F;SPDY支持 apache虽然市场份额渐渐被Nginx赶超，但其仍有Nginx取代不了的优点，特别是它的Rewrite和动态处理，是Nginx无法比拟的，很多人说Apache无法承载高并发，其实Apache在2.4的版本中，采用了Event MPM的工作模式，对于处理高并发有了很高的提升。但是，如果你是需要用到反向代理和很大的高并发项目；或者用低配置的特价">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.inner.icu/file/5d5eb1e24c2949f7ec559.png">
+<meta property="article:published_time" content="2023-08-02T08:44:13.000Z">
+<meta property="article:modified_time" content="2024-08-02T09:15:00.387Z">
+<meta property="article:author" content="Linus Jhon">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img.inner.icu/file/5d5eb1e24c2949f7ec559.png">
+  
+  
+  
+  <title>Apache开启HTTP2.0/SPDY支持 - 内云居</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"inner.icu","root":"/","version":"1.9.8","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>内云居</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">Apache开启HTTP2.0/SPDY支持</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-02 16:44" pubdate>
+          2023年8月2日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          22 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Apache开启HTTP2.0/SPDY支持</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Apache开启HTTP2-0-SPDY支持"><a href="#Apache开启HTTP2-0-SPDY支持" class="headerlink" title="Apache开启HTTP2.0&#x2F;SPDY支持"></a>Apache开启HTTP2.0&#x2F;SPDY支持</h1><p><img src="https://img.inner.icu/file/5d5eb1e24c2949f7ec559.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>apache虽然市场份额渐渐被Nginx赶超，但其仍有Nginx取代不了的优点，特别是它的Rewrite和动态处理，是Nginx无法比拟的，很多人说Apache无法承载高并发，其实Apache在2.4的版本中，采用了Event MPM的工作模式，对于处理高并发有了很高的提升。但是，如果你是需要用到反向代理和很大的高并发项目；或者用低配置的特价虚拟主机，建议你还是选Nginx，毕竟还是轻量。</p>
+<p>这不是今天的重点，今天主要想写下Apache如何开启HTTP&#x2F;2，因为我发现网上并没有相关文章，只有一篇还是机器翻译的官方文档。</p>
+<p>关于HTTP&#x2F;2的优点和性能有兴趣的请看之前写的《如何优化你的HTTPS》</p>
+<p>上面说到Apache的工作模式，这里顺便简单介绍下：</p>
+<p>Apache的目前有三种稳定的MPM(Multi-Processing Module，多进程处理模块)模式，分别是prefork，worker，event，它们同时也代表着Apache的演变和发展</p>
+<h3 id="Prefork-MPM"><a href="#Prefork-MPM" class="headerlink" title="Prefork MPM"></a>Prefork MPM</h3><p>Prefork MPM实现了一个非线程的、预派生的web服务器。它在Apache启动之初，就先预派生一些子进程，然后等待连接；可以减少频繁创建和销毁进程的开销，每个子进程只有一个线程，在一个时间点内，只能处理一个请求。这是一个成熟稳定，可以兼容新老模块，也不需要担心线程安全问题，但是一个进程相对占用资源，消耗大量内存，不擅长处理高并发的场景。<img src="https://img.inner.icu/file/72db0ca80940a6667bc59.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>在Apache的配置文件httpd.conf的配置方式：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">&lt;IfModule mpm_prefork_module&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">StartServers</span> <span class="number">5</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">MinSpareServers</span> <span class="number">5</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">MaxSpareServers</span> <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">MaxRequestWorkers</span> <span class="number">250</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">MaxConnectionsPerChild</span> <span class="number">1000</span></span><br><span class="line"></span><br><span class="line"><span class="section">&lt;/IfModule&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>显示详细信息</p>
+<p>StartServers 服务器启动时建立的子进程数量，prefork默认是5，</p>
+<p>MinSpareServers 空闲子进程的最小数量，默认5；如果当前空闲子进程数少于MinSpareServers ，那么Apache将以最大每秒一个的速度产生新的子进程。此参数不要设的太大。StartServers 服务器启动时建立的子进程数量，prefork默认是5，</p>
+<p>MaxSpareServers 空闲子进程的最大数量，默认10；如果当前有超过MaxSpareServers数量的空闲子进程，那么父进程会杀死多余的子进程。次参数也不需要设置太大，如果你将其设置比MinSpareServers 小，Apache会自动将其修改为MinSpareServers +1的数量。</p>
+<p>MaxRequestWorkers 限定服务器同一时间内客户端最大接入的请求数量，默认是256；任何超过了MaxRequestWorkers限制的请求都要进入等待队列，一旦一个个连接被释放，队列中的请求才将得到服务，如果要增大这个数值，必须先增大ServerLimit。在Apache2.3.1版本之前这参数MaxRequestWorkers被称为MaxClients。</p>
+<p>MaxConnectionsPerChild 每个子进程在其生命周期内允许最大的请求数量，如果请求总数已经达到这个数值，子进程将会结束，如果设置为0，子进程将永远不会结束。在Apache2.3.9之前称之为MaxRequestsPerChild。</p>
+<p>这里建议设置为非零，注意原因：</p>
+<p>1）能够防止(偶然的)内存泄漏无限进行，从而耗尽内存。</p>
+<p>2）给进程一个有限寿命，从而有助于当服务器负载减轻的时候减少活动进程的数量(重生的机会)。</p>
+<h3 id="Worker-MPM"><a href="#Worker-MPM" class="headerlink" title="Worker MPM"></a>Worker MPM</h3><p>和prefork模式相比，worker使用了多进程和多线程的混合模式，worker模式也同样会先预派生一些子进程，然后每个子进程创建一些线程，同时包括一个监听线程，每个请求过来会被分配到一个线程来服务。线程比起进程会更轻量，因为线程是通过共享父进程的内存空间，因此，内存的占用会减少一些，在高并发的场景下会比prefork有更多可用的线程，表现会更优秀一些；另外，如果一个线程出现了问题也会导致同一进程下的线程出现问题，如果是多个线程出现问题，也只是影响Apache的一部分，而不是全部。由于用到多进程多线程，需要考虑到线程的安全了，在使用keep-alive长连接的时候，某个线程会一直被占用，即使中间没有请求，需要等待到超时才会被释放（该问题在prefork模式下也存在）。<img src="https://img.inner.icu/file/795e5660a6546d452a2ba.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>如何配置在Apache的配置文件httpd.conf的配置方式：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">&lt;IfModule mpm_worker_module&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">StartServers</span> <span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">ServerLimit</span> <span class="number">16</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">MinSpareThreads</span> <span class="number">75</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">MaxSpareThreads</span> <span class="number">250</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">ThreadsPerChild</span> <span class="number">25</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">MaxRequestWorkers</span> <span class="number">400</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">MaxConnectionsPerChild</span> <span class="number">1000</span></span><br><span class="line"></span><br><span class="line"><span class="section">&lt;/IfModule&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>显示详细信息</p>
+<p>StartServers 服务器启动时建立的子进程数量,在workers模式下默认是3.配置参数解释：</p>
+<p>ServerLimit 系统配置的最大进程数量，默认不显示，自己添加上</p>
+<p>MinSpareThreads 空闲子进程的最小数量，默认75</p>
+<p>MaxSpareThreads 空闲子进程的最大数量，默认250</p>
+<p>ThreadsPerChild 每个子进程产生的线程数量，默认是64</p>
+<p>MaxRequestWorkers &#x2F; MaxClients 限定服务器同一时间内客户端最大接入的请求数量.</p>
+<p>MaxConnectionsPerChild 每个子进程在其生命周期内允许最大的请求数量，如果请求总数已经达到这个数值，子进程将会结束，如果设置为0，子进程将永远不会结束。</p>
+<p>同样这里建议设置为非零。</p>
+<p>Worker模式下所能同时处理的请求总数是由子进程总数乘以ThreadsPerChild值决定的，应该大于等于MaxRequestWorkers。</p>
+<p>如果负载很大，现有的子进程数不能满足时，控制进程会派生新的子进程。默认ServerLimit 最大的子进程总数是16，加大时也需要显式声明ServerLimit（最大值是20000）。</p>
+<p>需要注意的是，如果显式声明了ServerLimit，那么它乘以 MaxRequestWorkers必须是ThreadsPerChild的整数倍，否则 Apache将会自动调节到一个相应值。而在Apache2.4较新的小版本中会报错无法正常启动。</p>
+<h3 id="Event-MPM"><a href="#Event-MPM" class="headerlink" title="Event MPM"></a>Event MPM</h3><p>这是Apache最新的工作模式，它和worker模式很像，不同的是在于它解决了keep-alive长连接的时候占用线程资源被浪费的问题，在event工作模式中，会有一些专门的线程用来管理这些keep-alive类型的线程，当有真实请求过来的时候，将请求传递给服务器的线程，执行完毕后，又允许它释放。这增强了在高并发场景下的请求处理。</p>
+<p><img src="https://img.inner.icu/file/3d6ee3238bff1276e86d3.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>如何配置在Apache的配置文件httpd.conf的配置方式：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">&lt;IfModule mpm_event_module&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">StartServers</span> <span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">ServerLimit</span> <span class="number">16</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">MinSpareThreads</span> <span class="number">75</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">MaxSpareThreads</span> <span class="number">250</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">ThreadsPerChild</span> <span class="number">25</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">MaxRequestWorkers</span> <span class="number">400</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">MaxConnectionsPerChild</span> <span class="number">1000</span></span><br><span class="line"></span><br><span class="line"><span class="section">&lt;/IfModule&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>显示详细信息</p>
+<p>event 模式与 worker 模式完全一样，参考 worker 模式参数即可，这里不再重复。</p>
+<p>讲Apache开启HTTP&#x2F;2，为什么扯半天工作模式呢，因为这里有重点，HTTP&#x2F;2开启，要在Event MPM模式下，其他模式下HTTP&#x2F;2不工作</p>
+<p>了解了以上，开始说Apache开启HTTP&#x2F;2，Apache在2.4.17版本中新增了HTTP&#x2F;2的支持，而HTTP&#x2F;2需要openssl 1.0.2+的版本支持，如何查看你的Apache版本和工作模式？</p>
+<p>Openssl版本：</p>
+<p>对于包管理工具安装的Apache，三种都已经安装支持，对于编译安装Apache的，需要在编译的时候添加–with-mpm&#x3D;prefork|worker|event来指定为哪一种MPM，当然也可以编译为三种都支持，通过–enable-mpms-shared&#x3D;all，这样编译的时候，会在modules目录下自动编译出三个mpm的so文件，然后通过配置文件更改MPM</p>
+<p>说到配置文件，Apache的2.2版本和2.4版本的配置文件有所不同，Apache2.2的时候，模块都是在主配置文件httpd.conf中开启或添加，而在Apache2.4中，模块都根据分类整理在conf.modules.d下的配置文件中</p>
+<p>所以在Apache2.4的版本配置MPM，是在这里的00-mpm.conf中进行配置</p>
+<p>说到版本，对于编译安装的用户来说，这里不用多说，下载最新的包安装即可，对于yum包管理工具安装的用户来说，我们通过yum info httpd查看一下</p>
+<p>CentOS6的默认yum源里只有httpd 2.2.15.69的release</p>
+<p>Centos7的默认yum源里只有httpd 2.4.6.88的release</p>
+<p>所以即便用yum更新到最新，也无法开启HTTP&#x2F;2，这里需要借助第三方的库。</p>
+<p>CodeIT提供了一个很好的自定义库，这个库提供了最新版本的服务器软件(Apache &amp; Nginx)，在安装CodeIT库之前，需要开启EPEL，EPEL提供了CodeIT的依赖</p>
+<p>安装CodeIT库</p>
+<p>cd &#x2F;etc&#x2F;yum.repos.d &amp;&amp; wget <a target="_blank" rel="noopener" href="https://repo.codeit.guru/codeit.el%60rpm-q">https://repo.codeit.guru/codeit.el`rpm-q</a> –qf “%{VERSION}” $(rpm -q –whatprovides redhat-release)&#96;.repo</p>
+<p>安装完之后，在通过yum info httpd查看</p>
+<p>没有问题，最新版本的，支持HTTP&#x2F;2</p>
+<p>因为用Apache处理PHP的蛮多的，所以这里再多说句题外话。PHP在之前老的版本中，可以从官网看到，下载的包是区分线程安全和非线程安全的，但现在php7的包已经不区分线程安全和非线程安全了，而Apache2.4的worker工作模式和Event工作模式，由于其是基于线程的，所以会要求php用线程安全的方式，所以在进行php7的编译的时候，需要添加–enable-maintainer-zts来开启线程安全，否则通过httpd -t进行配置检测的时候，会提示错误，无法通过。当然，用profork工作模式，不会有问题。</p>
+<p>回到正题，其实Apache升级到大于2.4.17，openssl升级到1.0.2+，并且Apache用event mpm，对于Apache启动HTTP&#x2F;2已经基本完成了，剩下的就是很简单的添加两个配置的地方来完成HTTP&#x2F;2了</p>
+<p>添加http2模块，编译安装Apache，需要–enable-http2，如果是yum包安装，则安装mod_http2；安装完成后，在配置文件中添加加载项</p>
+<p>LoadModule http2_module modules&#x2F;mod_http2.so</p>
+<p>然后在全局或Vhost中添加协议指定HTTP&#x2F;2</p>
+<p>Protocols h2 http&#x2F;1.1</p>
+<p>另外可以天机HTTP&#x2F;2的IfModule，添加设置HTTP&#x2F;2的日志</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">&lt;IfModule http2_module&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="attribute">LogLevel</span> http2:info</span><br><span class="line"></span><br><span class="line"><span class="section">&lt;/IfModule&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>欧克，这个时候，你就可以保存配置用httpd -t测试配置，没有问题重新加载配置，就可以看到你的Apache已经启用h2了</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Apache开启HTTP2.0/SPDY支持</div>
+      <div>http://inner.icu/2023/08/02/Apache开启HTTP2-0-SPDY支持/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Linus Jhon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年8月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/05/15/Safari%E4%B8%ADposition%E5%AF%B9-webkit-font-smoothing%E7%9A%84%E5%BD%B1%E5%93%8D/" title="Safari中position对-webkit-font-smoothing的影响">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Safari中position对-webkit-font-smoothing的影响</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/02/%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95/" title="spring 远程调试">
+                        <span class="hidden-mobile">spring 远程调试</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://jump.inner.icu" target="_blank" rel="nofollow noopener"><span>JumpServer</span></a> <i class="iconfont icon-love"></i> <a href="https://img.inner.icu" target="_blank" rel="nofollow noopener"><span>IMG-OSS</span></a> <i class="iconfont icon-love"></i> <a href="https://alist.inner.icu" target="_blank" rel="nofollow noopener"><span>Alist</span></a> <i class="iconfont icon-love"></i> <a href="https://pdf.inner.icu" target="_blank" rel="nofollow noopener"><span>PDF-Tools</span></a>
+
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

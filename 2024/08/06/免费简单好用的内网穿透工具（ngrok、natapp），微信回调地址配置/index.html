@@ -1,0 +1,681 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Linus Jhon">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在一些特殊的场景下，需要把我们的内网暴露出去，比如写了一个接口或网站想让别人看到，或者进行第三方开发调试的时候需要一个外网可用的回调地址。 来对比一下ngrok和natapp免费功能的优劣     限制 http&#x2F;https 域名 支持程度 操作 访问    ngrok 加了一个中间页，需要设置特殊的请求头 都支持 可以使用隧道固定域名 微信对其有限制，有时候不生效 简单 没有梯子会很慢">
+<meta property="og:type" content="article">
+<meta property="og:title" content="免费简单好用的内网穿透工具（ngrok、natapp），微信回调地址配置">
+<meta property="og:url" content="http://inner.icu/2024/08/06/%E5%85%8D%E8%B4%B9%E7%AE%80%E5%8D%95%E5%A5%BD%E7%94%A8%E7%9A%84%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E5%B7%A5%E5%85%B7%EF%BC%88ngrok%E3%80%81natapp%EF%BC%89%EF%BC%8C%E5%BE%AE%E4%BF%A1%E5%9B%9E%E8%B0%83%E5%9C%B0%E5%9D%80%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="内云居">
+<meta property="og:description" content="在一些特殊的场景下，需要把我们的内网暴露出去，比如写了一个接口或网站想让别人看到，或者进行第三方开发调试的时候需要一个外网可用的回调地址。 来对比一下ngrok和natapp免费功能的优劣     限制 http&#x2F;https 域名 支持程度 操作 访问    ngrok 加了一个中间页，需要设置特殊的请求头 都支持 可以使用隧道固定域名 微信对其有限制，有时候不生效 简单 没有梯子会很慢">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.inner.icu/file/120164f4ac0bdc3f2b541.png">
+<meta property="article:published_time" content="2024-08-06T08:21:45.000Z">
+<meta property="article:modified_time" content="2024-08-06T08:27:08.354Z">
+<meta property="article:author" content="Linus Jhon">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img.inner.icu/file/120164f4ac0bdc3f2b541.png">
+  
+  
+  
+  <title>免费简单好用的内网穿透工具（ngrok、natapp），微信回调地址配置 - 内云居</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"inner.icu","root":"/","version":"1.9.8","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>内云居</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">免费简单好用的内网穿透工具（ngrok、natapp），微信回调地址配置</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-08-06 16:21" pubdate>
+          2024年8月6日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          786 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          7 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">免费简单好用的内网穿透工具（ngrok、natapp），微信回调地址配置</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>在一些特殊的场景下，需要把我们的内网暴露出去，比如写了一个接口或网站想让别人看到，或者进行第三方开发调试的时候需要一个外网可用的回调地址。</p>
+<p>来对比一下ngrok和natapp免费功能的优劣</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>限制</th>
+<th>http&#x2F;https</th>
+<th>域名</th>
+<th>支持程度</th>
+<th>操作</th>
+<th>访问</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ngrok</td>
+<td>加了一个中间页，需要设置特殊的请求头</td>
+<td>都支持</td>
+<td>可以使用隧道固定域名</td>
+<td>微信对其有限制，有时候不生效</td>
+<td>简单</td>
+<td>没有梯子会很慢</td>
+</tr>
+<tr>
+<td>natapp</td>
+<td>无</td>
+<td>只有http</td>
+<td>每次开启不一样的域名</td>
+<td>挺好</td>
+<td>简单</td>
+<td>正常</td>
+</tr>
+</tbody></table>
+<p>如果第三方不支持ngrok的时候可以使用natapp来替代，不然ngrok可以固定域名还是挺方便的</p>
+<h2 id="Natapp"><a href="#Natapp" class="headerlink" title="Natapp"></a>Natapp</h2><h3 id="1、登录注册账号、下载软件"><a href="#1、登录注册账号、下载软件" class="headerlink" title="1、登录注册账号、下载软件"></a>1、登录注册账号、下载软件</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://natapp.cn/">https://natapp.cn/</a></li>
+</ol>
+<p><img src="https://img.inner.icu/file/120164f4ac0bdc3f2b541.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>下载下来的 natapp可能没有权限，只需要给它赋予权限就好了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 777 natapp</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2、使用"><a href="#2、使用" class="headerlink" title="2、使用"></a>2、使用</h3><h4 id="2-1、购买隧道、查看token"><a href="#2-1、购买隧道、查看token" class="headerlink" title="2-1、购买隧道、查看token"></a>2-1、购买隧道、查看token</h4><p><img src="https://img.inner.icu/file/9a4b765925386eec4ba53.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br><img src="https://img.inner.icu/file/3d4f648d2d9bfe12507f3.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h4 id="2-2、端口穿透"><a href="#2-2、端口穿透" class="headerlink" title="2-2、端口穿透"></a>2-2、端口穿透</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">XXXXXXX 替换成你的token即可</span></span><br><span class="line">./natapp -authtoken=XXXXXXX</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img.inner.icu/file/ec8e657f86b97a3850f55.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h2 id="Ngrok"><a href="#Ngrok" class="headerlink" title="Ngrok"></a>Ngrok</h2><h3 id="1、登录注册账号、下载软件-1"><a href="#1、登录注册账号、下载软件-1" class="headerlink" title="1、登录注册账号、下载软件"></a>1、登录注册账号、下载软件</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://dashboard.ngrok.com/login">https://dashboard.ngrok.com/login</a></li>
+<li><a target="_blank" rel="noopener" href="https://ngrok.com/download">https://ngrok.com/download</a></li>
+</ol>
+<h3 id="2、使用-1"><a href="#2、使用-1" class="headerlink" title="2、使用"></a>2、使用</h3><h4 id="2-1、获取并设置-token"><a href="#2-1、获取并设置-token" class="headerlink" title="2-1、获取并设置 token"></a>2-1、获取并设置 token</h4><p><img src="https://img.inner.icu/file/04ac3144acbf6ae2cc734.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>可以执行Command Line，把token进行设置， ngrok就是上一步下载的可执行文件</p>
+<h4 id="2-2、使用"><a href="#2-2、使用" class="headerlink" title="2-2、使用"></a>2-2、使用</h4><p>假如我们要暴露 9999端口，就执行下面命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./ngrok http 9999</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img.inner.icu/file/cc95cfbce5c509c58dd53.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>复制生成的随机域名到浏览器，会看到如下页面</p>
+<p><img src="https://img.inner.icu/file/7b5440e2342c2f5b8b023.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>很早之前不会有这样一个中间页，如果只是临时访问，点一下 【Visit Site】也就可以了，但如果前后端对接或者第三方回调，就难办了。</p>
+<p>官方提供三个解决办法</p>
+<ol>
+<li>点一下 【Visit Site】</li>
+<li>访问的时候加一个特殊的请求头 【ngrok-skip-browser-warning】</li>
+<li>充值</li>
+</ol>
+<h3 id="3、隧道"><a href="#3、隧道" class="headerlink" title="3、隧道"></a>3、隧道</h3><p>使用隧道的好处就是可以固定域名</p>
+<p><img src="https://img.inner.icu/file/4feb36b69a21833c0126f.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><img src="https://img.inner.icu/file/ee8f478823c45e4c1f8a3.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><img src="https://img.inner.icu/file/f5b4ecbe2e910f4bdfab4.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><img src="https://img.inner.icu/file/c7a52a40cf33c71716442.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h2 id="微信回调配置"><a href="#微信回调配置" class="headerlink" title="微信回调配置"></a>微信回调配置</h2><h3 id="1、注册测试公众号"><a href="#1、注册测试公众号" class="headerlink" title="1、注册测试公众号"></a>1、注册测试公众号</h3><p>只需要扫码登录就行</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&t=sandbox/index">https://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&amp;t=sandbox/index</a></p>
+<h3 id="2、回调代码"><a href="#2、回调代码" class="headerlink" title="2、回调代码"></a>2、回调代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/callback&quot;)</span></span><br><span class="line"><span class="keyword">public</span> String <span class="title function_">entryCallbackSign</span><span class="params">(<span class="meta">@RequestParam(name = &quot;signature&quot;, required = false)</span> String signature,</span></span><br><span class="line"><span class="params">                                <span class="meta">@RequestParam(name = &quot;timestamp&quot;, required = false)</span> String timestamp,</span></span><br><span class="line"><span class="params">                                <span class="meta">@RequestParam(name = &quot;nonce&quot;, required = false)</span> String nonce,</span></span><br><span class="line"><span class="params">                                <span class="meta">@RequestParam(name = &quot;openid&quot;, required = false)</span> String openid,</span></span><br><span class="line"><span class="params">                                <span class="meta">@RequestParam(name = &quot;encrypt_type&quot;, required = false)</span> String encType,</span></span><br><span class="line"><span class="params">                                <span class="meta">@RequestParam(name = &quot;msg_signature&quot;, required = false)</span> String msgSignature,</span></span><br><span class="line"><span class="params">                                <span class="meta">@RequestParam(name = &quot;echostr&quot;, required = false)</span> String echostr)</span> &#123;</span><br><span class="line"></span><br><span class="line">    log.info(<span class="string">&quot;微信回调 GET&quot;</span>);</span><br><span class="line">    log.debug(<span class="string">&quot;signature: &#123;&#125;&quot;</span>, signature);</span><br><span class="line">    log.debug(<span class="string">&quot;timestamp: &#123;&#125;&quot;</span>, timestamp);</span><br><span class="line">    log.debug(<span class="string">&quot;nonce: &#123;&#125;&quot;</span>, nonce);</span><br><span class="line">    log.debug(<span class="string">&quot;openid: &#123;&#125;&quot;</span>, openid);</span><br><span class="line">    log.debug(<span class="string">&quot;encType: &#123;&#125;&quot;</span>, encType);</span><br><span class="line">    log.debug(<span class="string">&quot;msgSignature: &#123;&#125;&quot;</span>, msgSignature);</span><br><span class="line">    log.debug(<span class="string">&quot;echostr: &#123;&#125;&quot;</span>, echostr);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> echostr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@PostMapping(value = &quot;/callback&quot;, produces = &quot;application/xml; charset=UTF-8&quot;)</span></span><br><span class="line"><span class="keyword">public</span> String <span class="title function_">entryCallback</span><span class="params">(<span class="meta">@RequestBody(required = false)</span> String requestBody,</span></span><br><span class="line"><span class="params">                            <span class="meta">@RequestParam(name = &quot;signature&quot;, required = false)</span> String signature,</span></span><br><span class="line"><span class="params">                            <span class="meta">@RequestParam(name = &quot;timestamp&quot;, required = false)</span> String timestamp,</span></span><br><span class="line"><span class="params">                            <span class="meta">@RequestParam(name = &quot;nonce&quot;, required = false)</span> String nonce,</span></span><br><span class="line"><span class="params">                            <span class="meta">@RequestParam(name = &quot;openid&quot;, required = false)</span> String openid,</span></span><br><span class="line"><span class="params">                            <span class="meta">@RequestParam(name = &quot;encrypt_type&quot;, required = false)</span> String encType,</span></span><br><span class="line"><span class="params">                            <span class="meta">@RequestParam(name = &quot;msg_signature&quot;, required = false)</span> String msgSignature)</span> &#123;</span><br><span class="line">    log.info(<span class="string">&quot;微信回调 POST&quot;</span>);</span><br><span class="line">    log.debug(<span class="string">&quot;signature: &#123;&#125;&quot;</span>, signature);</span><br><span class="line">    log.debug(<span class="string">&quot;timestamp: &#123;&#125;&quot;</span>, timestamp);</span><br><span class="line">    log.debug(<span class="string">&quot;nonce: &#123;&#125;&quot;</span>, nonce);</span><br><span class="line">    log.debug(<span class="string">&quot;openid: &#123;&#125;&quot;</span>, openid);</span><br><span class="line">    log.debug(<span class="string">&quot;encType: &#123;&#125;&quot;</span>, encType);</span><br><span class="line">    log.debug(<span class="string">&quot;requestBody : &quot;</span> + requestBody);</span><br><span class="line">    log.debug(<span class="string">&quot;msgSignature: &#123;&#125;&quot;</span>, msgSignature);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3、回调配置"><a href="#3、回调配置" class="headerlink" title="3、回调配置"></a>3、回调配置</h3><p><img src="https://img.inner.icu/file/c8750b311c7eb4a5dd121.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>注：网页回调地址这里不需要http开头<br><img src="https://img.inner.icu/file/4880fa07d032753d05eb6.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>免费简单好用的内网穿透工具（ngrok、natapp），微信回调地址配置</div>
+      <div>http://inner.icu/2024/08/06/免费简单好用的内网穿透工具（ngrok、natapp），微信回调地址配置/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Linus Jhon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年8月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/08/12/%E5%A6%82%E4%BD%95%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" title="如何用Hexo搭建个人博客">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">如何用Hexo搭建个人博客</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/08/02/character%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" title="编译scss/sass报错invalid character解决方案">
+                        <span class="hidden-mobile">编译scss/sass报错invalid character解决方案</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://jump.inner.icu" target="_blank" rel="nofollow noopener"><span>JumpServer</span></a> <i class="iconfont icon-love"></i> <a href="https://img.inner.icu" target="_blank" rel="nofollow noopener"><span>IMG-OSS</span></a> <i class="iconfont icon-love"></i> <a href="https://alist.inner.icu" target="_blank" rel="nofollow noopener"><span>Alist</span></a> <i class="iconfont icon-love"></i> <a href="https://pdf.inner.icu" target="_blank" rel="nofollow noopener"><span>PDF-Tools</span></a>
+
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

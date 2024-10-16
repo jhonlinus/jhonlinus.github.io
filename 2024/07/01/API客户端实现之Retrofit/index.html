@@ -1,0 +1,704 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Linus Jhon">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="什么是Retrofit官方是这样的描述的 A type-safe REST client for Android and Java. 使用注解来描述HTTP请求，默认会集成URL参数替换。还提供了自定义头信息，多请求体，文件上传下载，模拟响应等功能。 怎样描述API终端 在你发起第一个请求之前，你需要描述你需要与之交互的API终端。首先你需要创建一个接口并且定义一个方法。 GitHubClien">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rest API客户端实现之Retrofit">
+<meta property="og:url" content="http://inner.icu/2024/07/01/API%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%AE%9E%E7%8E%B0%E4%B9%8BRetrofit/index.html">
+<meta property="og:site_name" content="内云居">
+<meta property="og:description" content="什么是Retrofit官方是这样的描述的 A type-safe REST client for Android and Java. 使用注解来描述HTTP请求，默认会集成URL参数替换。还提供了自定义头信息，多请求体，文件上传下载，模拟响应等功能。 怎样描述API终端 在你发起第一个请求之前，你需要描述你需要与之交互的API终端。首先你需要创建一个接口并且定义一个方法。 GitHubClien">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.inner.icu/file/fdb448c966aaf30c17db0.png">
+<meta property="article:published_time" content="2024-07-01T08:57:58.000Z">
+<meta property="article:modified_time" content="2024-08-02T09:20:21.274Z">
+<meta property="article:author" content="Linus Jhon">
+<meta property="article:tag" content="编程">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img.inner.icu/file/fdb448c966aaf30c17db0.png">
+  
+  
+  
+  <title>rest API客户端实现之Retrofit - 内云居</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"inner.icu","root":"/","version":"1.9.8","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>内云居</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">rest API客户端实现之Retrofit</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-01 16:57" pubdate>
+          2024年7月1日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          33 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">rest API客户端实现之Retrofit</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><img src="https://img.inner.icu/file/fdb448c966aaf30c17db0.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="什么是Retrofit"><a href="#什么是Retrofit" class="headerlink" title="什么是Retrofit"></a>什么是Retrofit</h2><p>官方是这样的描述的</p>
+<p>A type-safe REST client for Android and Java.</p>
+<p>使用注解来描述HTTP请求，默认会集成URL参数替换。还提供了自定义头信息，多请求体，文件上传下载，模拟响应等功能。</p>
+<p>怎样描述API终端 在你发起第一个请求之前，你需要描述你需要与之交互的API终端。首先你需要创建一个接口并且定义一个方法。</p>
+<h3 id="GitHubClient"><a href="#GitHubClient" class="headerlink" title="GitHubClient"></a>GitHubClient</h3><p>下面的代码定义了一个接口GitHubClient和一个方法reposForUser来请求给定用户的仓库列表。 @GET注解声明此请求使用HTTP GET方法。在定义的方法中，当调用reposForUser方法时，{user}路径将替换为给定的变量值。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">GitHubClient</span> &#123;  </span><br><span class="line"><span class="meta">@GET(&quot;/users/&#123;user&#125;/repos&quot;)</span></span><br><span class="line">Call&lt;List&lt;GitHubRepo&gt;&gt; <span class="title function_">reposForUser</span><span class="params">(</span></span><br><span class="line"><span class="params"><span class="meta">@Path(&quot;user&quot;)</span> String user</span></span><br><span class="line"><span class="params">)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>定义了一个类，GitHubRepo，这个类包括返回数据的所有属性。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GitHubRepo</span> &#123;  </span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> id;</span><br><span class="line"><span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">GitHubRepo</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getId</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>关于前面提到的JSON映射：GitHubClient接口定义了一个名为reposForUser的方法，返回类型为List 。 Retrofit确保服务器响应得到正确映射。</p>
+<h3 id="Retrofit-REST-Client"><a href="#Retrofit-REST-Client" class="headerlink" title="Retrofit REST Client"></a>Retrofit REST Client</h3><p>在描述完APi接口和对象模型后，下面准备创建请求。Retrofit的所有请求的基础是Retrofit(2.0+)这个类。你可以使用构造器为所有请求设置一些常规选项，包括BaseURl和converter。</p>
+<p>创建adapter后，可以创建一个客户端来执行请求。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">API_BASE_URL</span> <span class="operator">=</span> <span class="string">&quot;https://api.github.com/&quot;</span>;</span><br><span class="line"></span><br><span class="line">OkHttpClient.<span class="type">Builder</span> <span class="variable">httpClient</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OkHttpClient</span>.Builder();</span><br><span class="line"></span><br><span class="line">Retrofit.<span class="type">Builder</span> <span class="variable">builder</span> <span class="operator">=</span>  </span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Retrofit</span>.Builder()</span><br><span class="line">.baseUrl(API_BASE_URL)</span><br><span class="line">.addConverterFactory(</span><br><span class="line">GsonConverterFactory.create()</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="type">Retrofit</span> <span class="variable">retrofit</span> <span class="operator">=</span>  </span><br><span class="line">builder</span><br><span class="line">.client(</span><br><span class="line">httpClient.build()</span><br><span class="line">)</span><br><span class="line">.build();</span><br><span class="line"></span><br><span class="line"><span class="type">GitHubClient</span> <span class="variable">client</span> <span class="operator">=</span>  retrofit.create(GitHubClient.class);  </span><br></pre></td></tr></table></figure>
+
+<p>在上边的代码中我们定义了BaseURl是”<a target="_blank" rel="noopener" href="https://api.github.com/%E2%80%9C,%E5%B9%B6%E4%B8%94%E4%BD%BF%E7%94%A8%E4%BA%86%E6%9C%80%E5%B0%91%E7%9A%84%E9%85%8D%E7%BD%AE%E3%80%82Retrofit%E5%8F%AF%E4%BB%A5%E6%9C%89%E6%9B%B4%E5%A4%9A%E7%9A%84%E9%85%8D%E7%BD%AE%EF%BC%8C%E4%BD%86%E6%98%AF%E5%9C%A8%E6%9C%AC%E4%BE%8B%E4%B8%AD%E4%B8%8D%E4%BD%BF%E7%94%A8%E3%80%82">https://api.github.com/“,并且使用了最少的配置。Retrofit可以有更多的配置，但是在本例中不使用。</a></p>
+<h3 id="JSON-Mapping"><a href="#JSON-Mapping" class="headerlink" title="JSON Mapping"></a>JSON Mapping</h3><p>在大多数情况下，对服务器的请求和来自服务器的响应不是Java对象。 它们映射到一些其他格式中，如JSON。 GitHub的API使用JSON，在Retrofit2中，你需要显式的将一个转换器(convert)田家达Retrofit对象。</p>
+<h3 id="Retrofit-in-Use"><a href="#Retrofit-in-Use" class="headerlink" title="Retrofit in Use"></a>Retrofit in Use</h3><p>在Retrofit 2中，您使用客户端获取call对象。一旦你对创建的call对象调用了.enqueue(异步请求)，请求将由Retrofit进行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Create a very simple REST adapter which points the GitHub API endpoint.</span></span><br><span class="line"><span class="type">GitHubClient</span> <span class="variable">client</span> <span class="operator">=</span>  retrofit.create(GitHubClient.class);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Fetch a list of the Github repositories.</span></span><br><span class="line">Call&lt;List&lt;GitHubRepo&gt;&gt; call =  </span><br><span class="line">client.reposForUser(<span class="string">&quot;fs-opensource&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Execute the call asynchronously. Get a positive or negative callback.</span></span><br><span class="line">call.enqueue(<span class="keyword">new</span> <span class="title class_">Callback</span>&lt;List&lt;GitHubRepo&gt;&gt;() &#123;  </span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onResponse</span><span class="params">(Call&lt;List&lt;GitHubRepo&gt;&gt; call, Response&lt;List&lt;GitHubRepo&gt;&gt; response)</span> &#123;</span><br><span class="line"><span class="comment">// The network call was a success and we got a response</span></span><br><span class="line"><span class="comment">// <span class="doctag">TODO:</span> use the repository list and display it</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onFailure</span><span class="params">(Call&lt;List&lt;GitHubRepo&gt;&gt; call, Throwable t)</span> &#123;</span><br><span class="line">        <span class="comment">// the network call was a failure</span></span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span> handle error</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>Retrofit将返回一个方便的列表，你可以进一步使用它来显示您的应用程序中的数据。</p>
+<h2 id="API终端"><a href="#API终端" class="headerlink" title="API终端"></a>API终端</h2><h3 id="怎样描述一个API终端"><a href="#怎样描述一个API终端" class="headerlink" title="怎样描述一个API终端"></a>怎样描述一个API终端</h3><p>我们在一个接口文件中描述我们的API终端。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">GitHubClient</span> &#123;  </span><br><span class="line"><span class="meta">@GET(&quot;/users/&#123;user&#125;/repos&quot;)</span></span><br><span class="line">Call&lt;List&lt;GitHubRepo&gt;&gt; <span class="title function_">reposForUser</span><span class="params">(</span></span><br><span class="line"><span class="params"><span class="meta">@Path(&quot;user&quot;)</span> String user</span></span><br><span class="line"><span class="params">)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在让我们来看看这些选项中的细节。</p>
+<h3 id="HTTP-Method"><a href="#HTTP-Method" class="headerlink" title="HTTP Method"></a>HTTP Method</h3><p>在Java接口中使用注解来描述每一个API终端，最终处理请求。第一件事就是定义HTTP请求方法，如GET，POST，PUT，DELETE等。Retrofit为每个请求方法都提供了注解，你只需要为每个HTTP方法添加下面的注解即可： <code>@GET，@PSOT，@PUT，@DELETE，@PATCH，@HEAD</code>。</p>
+<p>下面是几个简单的例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">FutureStudioClient</span> &#123;  </span><br><span class="line"><span class="meta">@GET(&quot;/user/info&quot;)</span></span><br><span class="line">Call&lt;UserInfo&gt; <span class="title function_">getUserInfo</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PUT(&quot;/user/info&quot;)</span></span><br><span class="line">    Call&lt;UserInfo&gt; <span class="title function_">updateUserInfo</span><span class="params">(</span></span><br><span class="line"><span class="params">        <span class="meta">@Body</span> UserInfo userInfo</span></span><br><span class="line"><span class="params">    )</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@DELETE(&quot;/user&quot;)</span></span><br><span class="line">    Call&lt;Void&gt; <span class="title function_">deleteUser</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="HTTP-Resource-Location"><a href="#HTTP-Resource-Location" class="headerlink" title="HTTP Resource Location"></a>HTTP Resource Location</h3><p>此外，你需要为你的注解添加相对与BaseURL的String参数来完成路径，例如 @GET（“&#x2F; user &#x2F; info”）。 在大多数情况下，您只会传递相对网址，而不传递完整网址（例如<a target="_blank" rel="noopener" href="http://futurestud.io/api/user/info%EF%BC%89%E3%80%82">http://futurestud.io/api/user/info）。</a> 这具有的优点是，Retrofit只需要一次请求基本URL（<a target="_blank" rel="noopener" href="http://futurestud.io)./">http://futurestud.io）。</a> 如果你要更改API基本网址，则只需在一个位置更改它。 此外，它使一些更高端的事情，如动态基本URL，更容易。 不过，你可以指定完整的URL。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">FutureStudioClient</span> &#123;  </span><br><span class="line"><span class="meta">@GET(&quot;/user/info&quot;)</span></span><br><span class="line">Call&lt;UserInfo&gt; <span class="title function_">getUserInfo</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PUT(&quot;/user/info&quot;)</span></span><br><span class="line">    Call&lt;UserInfo&gt; <span class="title function_">updateUserInfo</span><span class="params">(</span></span><br><span class="line"><span class="params">        <span class="meta">@Body</span> UserInfo userInfo</span></span><br><span class="line"><span class="params">    )</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@DELETE(&quot;/user&quot;)</span></span><br><span class="line">    Call&lt;Void&gt; <span class="title function_">deleteUser</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// example for passing a full URL</span></span><br><span class="line">    <span class="meta">@GET(&quot;https://futurestud.io/tutorials/rss/&quot;)</span></span><br><span class="line">    Call&lt;FutureStudioRssFeed&gt; <span class="title function_">getRssFeed</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Function-Name-Return-Type"><a href="#Function-Name-Return-Type" class="headerlink" title="Function Name &amp; Return Type"></a>Function Name &amp; Return Type</h3><p>Java方法声明:Call getUserInfo（）; 这包含三个部分：</p>
+<p>方法名—getUserInfo 你可以自由定义方法名称。 Retrofit不在乎，它不会对功能产生任何影响。不过，你应该选择一个名称，这将有助于你和其他开发人员了解什么是API请求。</p>
+<p>方法返回的类型—UserInfo 你必须定义你期望从服务器的什么样的数据。例如，当您请求某些用户信息时，您可以将其指定为Call 。 UserInfo类包含将保存用户数据的属性。 Retrofit会自动映射它，您不必进行任何手动解析。如果你想要原始响应，你可以使用ResponseBody而不是像UserInfo这样的特定类。如果你根本不在乎服务器响应什么，你可以使用Void。在所有这些情况下，你必须将它包装到一个类型的Retrofit Call &lt;&gt;类中。</p>
+<p>方法传递的参数—此处为空 您可以将参数传递给方法。有各种各样的可能选项，此处列举一些：</p>
+<p>@Body: 发送Java对象作为请求体 @Url: 使用动态地址 @Field: 以表单形式发送数据</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">FutureStudioClient</span> &#123;  </span><br><span class="line"><span class="meta">@GET(&quot;/user/info&quot;)</span></span><br><span class="line">Call&lt;UserInfo&gt; <span class="title function_">getUserInfo</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PUT(&quot;/user/info&quot;)</span></span><br><span class="line">    Call&lt;Void&gt; <span class="title function_">updateUserInfo</span><span class="params">(</span></span><br><span class="line"><span class="params">        <span class="meta">@Body</span> UserInfo userInfo</span></span><br><span class="line"><span class="params">    )</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GET</span></span><br><span class="line">    Call&lt;ResponseBody&gt; <span class="title function_">getUserProfilePhoto</span><span class="params">(</span></span><br><span class="line"><span class="params">        <span class="meta">@Url</span> String profilePhotoUrl</span></span><br><span class="line"><span class="params">    )</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Path-Parameters"><a href="#Path-Parameters" class="headerlink" title="Path Parameters"></a>Path Parameters</h3><p>REST API是基于动态URL构建的。 您可以通过替换部分URL来访问资源，例如获取我们网页上的第三个教程可能是<a target="_blank" rel="noopener" href="http://futurestud.io/api/tutorials/3%E3%80%82">http://futurestud.io/api/tutorials/3。</a> 最后的3指定您要访问的页面。 Retrofit提供了一种简单的方法来替换路径参数。 例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">GitHubClient</span> &#123;  </span><br><span class="line"><span class="meta">@GET(&quot;/users/&#123;user&#125;/repos&quot;)</span></span><br><span class="line">Call&lt;List&lt;GitHubRepo&gt;&gt; <span class="title function_">reposForUser</span><span class="params">(</span></span><br><span class="line"><span class="params"><span class="meta">@Path(&quot;user&quot;)</span> String user</span></span><br><span class="line"><span class="params">)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里，{user}值是动态的，并且将在请求发生时设置。 如果在URL中包含路径参数，则需要添加@Path（）函数参数，其中@Path值与URL中的占位符匹配（在本例中为@Path（“user”））。 如有必要，您可以使用多个占位符。 只需确保您始终具有匹配参数的确切数量。 您甚至可以使用可选的路径参数。</p>
+<h3 id="Query-Parameters"><a href="#Query-Parameters" class="headerlink" title="Query Parameters"></a>Query Parameters</h3><p>动态URL的另一个大部分是查询参数 与路径参数不同，您不需要将它们添加到注释URL。 你可以简单地添加一个方法参数@Query（）和查询参数名称，描述类型，你很好去。 Retrofit会自动将其附加到请求。 如果传递一个空值作为查询参数，Retrofit将忽略它。 您还可以添加多个查询参数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">FutureStudioClient</span> &#123;</span><br><span class="line">  <span class="meta">@GET(&quot;/tutorials&quot;)</span></span><br><span class="line">  Call&lt;List&lt;Tutorial&gt;&gt; <span class="title function_">getTutorials</span><span class="params">(</span></span><br><span class="line"><span class="params">          <span class="meta">@Query(&quot;page&quot;)</span> Integer page</span></span><br><span class="line"><span class="params">  )</span>;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@GET(&quot;/tutorials&quot;)</span></span><br><span class="line">  Call&lt;List&lt;Tutorial&gt;&gt; <span class="title function_">getTutorials</span><span class="params">(</span></span><br><span class="line"><span class="params">          <span class="meta">@Query(&quot;page&quot;)</span> Integer page,</span></span><br><span class="line"><span class="params">          <span class="meta">@Query(&quot;order&quot;)</span> String order,</span></span><br><span class="line"><span class="params">          <span class="meta">@Query(&quot;author&quot;)</span> String author,</span></span><br><span class="line"><span class="params">          <span class="meta">@Query(&quot;published_at&quot;)</span> Date date</span></span><br><span class="line"><span class="params">  )</span>;</span><br><span class="line">&#125;    </span><br></pre></td></tr></table></figure>
+
+<p>在上面的例子中，你可以使用第二个方法来替换第一个方法，只需要把其他的值设置为null即可。</p>
+<h2 id="创建一个可复用的客户端"><a href="#创建一个可复用的客户端" class="headerlink" title="创建一个可复用的客户端"></a>创建一个可复用的客户端</h2><p>The ServiceGenerator Retrofit对象及其构建器是所有请求的核心。 在这里，你可以配置和准备请求，响应，认证，日志记录和错误处理。 让我们从简单的代码开始。 在其当前状态下，它仅定义一种方法为给定类&#x2F;接口创建基本REST客户端，该接口从接口返回服务类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ServiceGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">BASE_URL</span> <span class="operator">=</span> <span class="string">&quot;https://api.github.com/&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Retrofit retrofit;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Retrofit.<span class="type">Builder</span> <span class="variable">builder</span> <span class="operator">=</span></span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Retrofit</span>.Builder()</span><br><span class="line">                    .baseUrl(BASE_URL)</span><br><span class="line">                    .addConverterFactory(GsonConverterFactory.create());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> OkHttpClient.<span class="type">Builder</span> <span class="variable">httpClient</span> <span class="operator">=</span></span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">OkHttpClient</span>.Builder();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;S&gt; S <span class="title function_">createService</span><span class="params">(Class&lt;S&gt; serviceClass)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> retrofit.create(serviceClass);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ServiceGenerator类使用Retrofit的Retrofit构造器创建具有BaseURL（BASE_URL）的新REST客户端。 例如，GitHub的API的BaseURL位于<a target="_blank" rel="noopener" href="https://api.github.com/%E3%80%82">https://api.github.com/。</a></p>
+<p>createService方法将serviceClass（它是API请求的注释接口）作为参数，并从中创建一个可用的客户端。 在生成的客户端上，您将能够执行网络请求。</p>
+<h3 id="Why-Is-Everything-Declared-Static-Within-the-ServiceGenerator"><a href="#Why-Is-Everything-Declared-Static-Within-the-ServiceGenerator" class="headerlink" title="Why Is Everything Declared Static Within the ServiceGenerator?"></a>Why Is Everything Declared Static Within the ServiceGenerator?</h3><p>我们想在整个应用程序中使用相同的对象（OkHttpClient，Retrofit，…），只打开一个套接字连接，处理所有的请求和响应，包括缓存和更多。 通常的做法是只使用一个OkHttpClient实例来重用开放套接字连接。 这意味着，我们需要通过依赖注入或使用静态字段将OkHttpClient注入到此类中。 正如你所看到的，我们选择使用静态字段。 并且因为我们在这个类中使用OkHttpClient，我们需要使所有字段和方法静态。</p>
+<p>除了加快速度，我们可以在移动设备上节省一些有价值的内存，当我们不必一遍又一遍地重新创建相同的对象。</p>
+<h3 id="Using-the-ServiceGenerator"><a href="#Using-the-ServiceGenerator" class="headerlink" title="Using the ServiceGenerator"></a>Using the ServiceGenerator</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">GitHubClient</span> <span class="variable">client</span> <span class="operator">=</span> ServiceGenerator.createService(GitHubClient.class);  </span><br></pre></td></tr></table></figure>
+
+<h3 id="Preparing-Logging"><a href="#Preparing-Logging" class="headerlink" title="Preparing Logging"></a>Preparing Logging</h3><p>使用Retrofit 2进行日志记录是由称为HttpLoggingInterceptor的拦截器完成的。 您需要向OkHttpClient添加此拦截器的实例。 例如，您可以通过以下方式解决它：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ServiceGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">BASE_URL</span> <span class="operator">=</span> <span class="string">&quot;https://api.github.com/&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Retrofit retrofit;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Retrofit.<span class="type">Builder</span> <span class="variable">builder</span> <span class="operator">=</span></span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Retrofit</span>.Builder()</span><br><span class="line">                    .baseUrl(BASE_URL)</span><br><span class="line">                    .addConverterFactory(GsonConverterFactory.create());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">HttpLoggingInterceptor</span> <span class="variable">logging</span> <span class="operator">=</span></span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">HttpLoggingInterceptor</span>()</span><br><span class="line">                    .setLevel(HttpLoggingInterceptor.Level.BODY);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> OkHttpClient.<span class="type">Builder</span> <span class="variable">httpClient</span> <span class="operator">=</span></span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">OkHttpClient</span>.Builder();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;S&gt; S <span class="title function_">createService</span><span class="params">(</span></span><br><span class="line"><span class="params">        Class&lt;S&gt; serviceClass)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (!httpClient.interceptors().contains(logging)) &#123;</span><br><span class="line">            httpClient.addInterceptor(logging);</span><br><span class="line">            builder.client(httpClient.build());</span><br><span class="line">            retrofit = builder.build();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> retrofit.create(serviceClass);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有一些事情你必须知道。 首先，确保你没有不小心多次添加拦截器!通过httpClient.interceptors().contains(logging)来检查日志拦截器已经存在。 其次，确保不在每次createService调用上创建新的对象。 否则，将会使ServiceGenerator失去意义。</p>
+<h3 id="Prepare-Authentication"><a href="#Prepare-Authentication" class="headerlink" title="Prepare Authentication"></a>Prepare Authentication</h3><p>需要在创建客户端时传递附加参数到createService。</p>
+<p>让我们看一个Hawk身份验证的示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ServiceGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">BASE_URL</span> <span class="operator">=</span> <span class="string">&quot;https://api.github.com/&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Retrofit retrofit;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Retrofit.<span class="type">Builder</span> <span class="variable">builder</span> <span class="operator">=</span></span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Retrofit</span>.Builder()</span><br><span class="line">                    .baseUrl(BASE_URL)</span><br><span class="line">                    .addConverterFactory(GsonConverterFactory.create());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">HttpLoggingInterceptor</span> <span class="variable">logging</span> <span class="operator">=</span></span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">HttpLoggingInterceptor</span>()</span><br><span class="line">                    .setLevel(HttpLoggingInterceptor.Level.BODY);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> OkHttpClient.<span class="type">Builder</span> <span class="variable">httpClient</span> <span class="operator">=</span></span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">OkHttpClient</span>.Builder();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;S&gt; S <span class="title function_">createService</span><span class="params">(</span></span><br><span class="line"><span class="params">            Class&lt;S&gt; serviceClass, <span class="keyword">final</span> HawkCredentials credentials)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (credentials != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="type">HawkAuthenticationInterceptor</span> <span class="variable">interceptor</span> <span class="operator">=</span></span><br><span class="line">                    <span class="keyword">new</span> <span class="title class_">HawkAuthenticationInterceptor</span>(credentials);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (!httpClient.interceptors().contains(interceptor)) &#123;</span><br><span class="line">                httpClient.addInterceptor(interceptor);</span><br><span class="line"></span><br><span class="line">                builder.client(httpClient.build());</span><br><span class="line">                retrofit = builder.build();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> retrofit.create(serviceClass);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>createService现在具有HawkCredentials的第二个参数。 如果传递非空值，它将创建必要的Hawk身份验证拦截器并将其添加到Retrofit客户端。 我们还需要重建Retrofit以将更改应用到下一个请求。</p>
+<h2 id="URL的处理与解析"><a href="#URL的处理与解析" class="headerlink" title="URL的处理与解析"></a>URL的处理与解析</h2><h3 id="Url-Handling-Introduction"><a href="#Url-Handling-Introduction" class="headerlink" title="Url Handling Introduction"></a>Url Handling Introduction</h3><p>在Retrofit 2中，所有的URL都是使用由HttpUrl类来解决的，它是由OkHttp3提供给你的。 尽管如此，它引入了您需要处理您的应用程序中的所有网址的方式的更改：BaseURL和endpointURl以及为特定请求定义的任何动态网址。</p>
+<p>请记住：Retrofit 2中的网址会像网页上的链接一样处理： … 。</p>
+<h3 id="baseUrl-Resolution"><a href="#baseUrl-Resolution" class="headerlink" title="baseUrl Resolution"></a>baseUrl Resolution</h3><p>使用Retrofit，您需要一个总是具有相同BaseURL的特定API。这个BaseURl共享相同的方案和主机，您可以在一个地方(使用Retrofit.Builder())定义它，并在必要时更改它，而不必触及应用程序中的每个终端。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Retrofit.<span class="type">Builder</span> <span class="variable">builder</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Retrofit</span>.Builder().baseUrl(<span class="string">&quot;https://your.base.url/api/&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>BaseURL用于每个请求，任何终端（如@GET等）都将针对此地址解析。BaseURL必修以斜杠结尾：&#x2F;。具有相对路径地址的每个终端定义将正确解析，因为它将自身附加到已经定义或包括路径参数的BaseURL。</p>
+<p>让我们来看一个例子：</p>
+<h1 id="Good-Practice"><a href="#Good-Practice" class="headerlink" title="Good Practice"></a>Good Practice</h1><p>base url: <a target="_blank" rel="noopener" href="https://futurestud.io/api/">https://futurestud.io/api/</a><br>endpoint: my&#x2F;endpoint<br>Result: <a target="_blank" rel="noopener" href="https://futurestud.io/api/my/endpoint">https://futurestud.io/api/my/endpoint</a></p>
+<h1 id="Bad-Practice"><a href="#Bad-Practice" class="headerlink" title="Bad Practice"></a>Bad Practice</h1><p>base url: <a target="_blank" rel="noopener" href="https://futurestud.io/api">https://futurestud.io/api</a><br>endpoint: &#x2F;my&#x2F;endpoint<br>Result: <a target="_blank" rel="noopener" href="https://futurestud.io/my/endpoint">https://futurestud.io/my/endpoint</a><br>上面的示例说明了如果你不以斜杠结尾你的BaseURl的api路径参数将被忽略，并从生成的请求网址中删除。</p>
+<p>实际上，Retrofit帮助你，如果你传递一个基本url没有尾部斜线。 它会抛出异常，告诉你，你的基本url需要以斜杠结尾。</p>
+<h3 id="Absolute-Urls"><a href="#Absolute-Urls" class="headerlink" title="Absolute Urls"></a>Absolute Urls</h3><p>你可以将绝对url传递给你的端点url。 尽管如此，这种技术可能需要在您的应用程序中调用适当的端点。 随着时间的推移，您的后端将发布一个新的API版本。 根据版本控制的类型，让我们假设您的后端开发人员选择在网址中的API版本。 您需要将基本网址从v2压缩到v3。 此时，您必须处理API v3引入的所有突变。 要依赖于所选的v2端点，可以使用绝对URL来直接指定API版本。</p>
+<h1 id="Example-1"><a href="#Example-1" class="headerlink" title="Example 1"></a>Example 1</h1><p>base url: <a target="_blank" rel="noopener" href="https://futurestud.io/api/v3/">https://futurestud.io/api/v3/</a><br>endpoint: my&#x2F;endpoint<br>Result: <a target="_blank" rel="noopener" href="https://futurestud.io/api/v3/my/endpoint">https://futurestud.io/api/v3/my/endpoint</a></p>
+<h1 id="Example-2"><a href="#Example-2" class="headerlink" title="Example 2"></a>Example 2</h1><p>base url: <a target="_blank" rel="noopener" href="https://futurestud.io/api/v3/">https://futurestud.io/api/v3/</a><br>endpoint: &#x2F;api&#x2F;v2&#x2F;another&#x2F;endpoint<br>Result: <a target="_blank" rel="noopener" href="https://futurestud.io/api/v2/another/endpoint">https://futurestud.io/api/v2/another/endpoint</a><br>在更改BaseURL的情况下，你将自动更需吧所有端点以使用新的URL和请求。 可以看到，示例1的工作原理与预期一样，只是将端点url附加到针对v3的API调用的基本URL。</p>
+<p>示例2说明了将基本URL升级到v3并仍然使用所选端点的API v2的情况。 这可能是由于您的客户端的巨大升级造成的，并且您仍然希望从其他端点的API v3的所有其他好处中获益。</p>
+<h3 id="Dynamic-Urls-or-Passing-a-Full-Url"><a href="#Dynamic-Urls-or-Passing-a-Full-Url" class="headerlink" title="Dynamic Urls or Passing a Full Url"></a>Dynamic Urls or Passing a Full Url</h3><p>使用Retrofit 2，您可以将给定的URL传递到端点，然后用于请求。也就是说，如果您已使用https定义了BaseURL，并且想要确保应用程序中的所有其他请求也都使用https，那么你只需使用双斜线&#x2F;&#x2F;开始请求网址即可。 这是Web中的常见做法，以避免浏览器在同一页面上使用安全和不安全的资源时发出警告。</p>
+<h1 id="Example-3-—-completely-different-url"><a href="#Example-3-—-completely-different-url" class="headerlink" title="Example 3 — completely different url"></a>Example 3 — completely different url</h1><p>base url: <a target="_blank" rel="noopener" href="http://futurestud.io/api/">http://futurestud.io/api/</a><br>endpoint: <a target="_blank" rel="noopener" href="https://api.futurestud.io/">https://api.futurestud.io/</a><br>Result: <a target="_blank" rel="noopener" href="https://api.futurestud.io/">https://api.futurestud.io/</a></p>
+<h1 id="Example-4-—-Keep-the-base-url’s-scheme"><a href="#Example-4-—-Keep-the-base-url’s-scheme" class="headerlink" title="Example 4 — Keep the base url’s scheme"></a>Example 4 — Keep the base url’s scheme</h1><p>base url: <a target="_blank" rel="noopener" href="https://futurestud.io/api/">https://futurestud.io/api/</a><br>endpoint: &#x2F;&#x2F;api.futurestud.io&#x2F;<br>Result: <a target="_blank" rel="noopener" href="https://api.futurestud.io/">https://api.futurestud.io/</a></p>
+<h1 id="Example-5-—-Keep-the-base-url’s-scheme"><a href="#Example-5-—-Keep-the-base-url’s-scheme" class="headerlink" title="Example 5 — Keep the base url’s scheme"></a>Example 5 — Keep the base url’s scheme</h1><p>base url: <a target="_blank" rel="noopener" href="http://futurestud.io/api/">http://futurestud.io/api/</a><br>endpoint: &#x2F;&#x2F;api.github.com<br>Result: <a target="_blank" rel="noopener" href="http://api.github.com/">http://api.github.com</a><br>示例3显示了在使用完全不同的URL时替换BaseURL。 此示例在请求具有不同位置的文件或图像时很有用，例如某些文件在您自己的服务器上，而其他文件或图像存储在Amazon的S3上。 您只将该位置作为网址接收并使用Retrofit，您可以传递请求端点的完整网址。</p>
+<p>如前所述，您可以保留BaseURL的方案。 在示例4中，我们不使用API的路径段，而是使用子域。 我们仍然想保留以前定义的方案，因此只传递带有前导&#x2F;&#x2F;的完整网址。</p>
+<p>示例5使用与定义的BaseURL相同的方案，但用给定的端点url替换主机和路径段。</p>
+<h3 id="在运行时更换BaseURL"><a href="#在运行时更换BaseURL" class="headerlink" title="在运行时更换BaseURL"></a>在运行时更换BaseURL</h3><p>The Core: ServiceGenerator ServiceGenerator使用多个静态字段和一个String常量API_BASE_URL，它保存API基址url：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ServiceGenerator</span> &#123;  </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">API_BASE_URL</span> <span class="operator">=</span> <span class="string">&quot;http://futurestud.io/api&quot;</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Retrofit retrofit;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Retrofit.<span class="type">Builder</span> <span class="variable">builder</span> <span class="operator">=</span></span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Retrofit</span>.Builder()</span><br><span class="line">                    .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">                    .baseUrl(API_BASE_URL);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> OkHttpClient.<span class="type">Builder</span> <span class="variable">httpClient</span> <span class="operator">=</span></span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">OkHttpClient</span>.Builder();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// No need to instantiate this class.</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">ServiceGenerator</span><span class="params">()</span> &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;S&gt; S <span class="title function_">createService</span><span class="params">(Class&lt;S&gt; serviceClass, AccessToken token)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">authToken</span> <span class="operator">=</span> token.getTokenType().concat(token.getAccessToken());</span><br><span class="line">        <span class="keyword">return</span> createService(serviceClass, authToken);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// more methods</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Adjusting-the-ServiceGenerator"><a href="#Adjusting-the-ServiceGenerator" class="headerlink" title="Adjusting the ServiceGenerator"></a>Adjusting the ServiceGenerator</h3><p>通过此设置，您无需在运行时更改API_BASE_URL常量。假如你在源代码中改变它，编译一个新的.apk并再次测试它，这是非常不方便，如果你正在使用多个API部署，我们将对ServiceGenerator类进行小的更改：</p>
+<p>复制</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ServiceGenerator</span> &#123;  </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">String</span> <span class="variable">apiBaseUrl</span> <span class="operator">=</span> <span class="string">&quot;http://futurestud.io/api&quot;</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Retrofit retrofit;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Retrofit.<span class="type">Builder</span> <span class="variable">builder</span> <span class="operator">=</span></span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Retrofit</span>.Builder()</span><br><span class="line">                    .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">                    .baseUrl(apiBaseUrl);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> OkHttpClient.<span class="type">Builder</span> <span class="variable">httpClient</span> <span class="operator">=</span></span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">OkHttpClient</span>.Builder();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// No need to instantiate this class.</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">ServiceGenerator</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">changeApiBaseUrl</span><span class="params">(String newApiBaseUrl)</span> &#123;</span><br><span class="line">        apiBaseUrl = newApiBaseUrl;</span><br><span class="line"></span><br><span class="line">        builder = <span class="keyword">new</span> <span class="title class_">Retrofit</span>.Builder()</span><br><span class="line">                        .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">                        .baseUrl(apiBaseUrl);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;S&gt; S <span class="title function_">createService</span><span class="params">(Class&lt;S&gt; serviceClass, AccessToken token)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">authToken</span> <span class="operator">=</span> token.getTokenType().concat(token.getAccessToken());</span><br><span class="line">        <span class="keyword">return</span> createService(serviceClass, authToken);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// more methods</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将常量API_BASE_URL重命名为非最终字段apiBaseUrl。添加新的静态方法changeApiBaseUrl（String newApiBaseUrl），它将更改apiBaseUrl变量。 它还会创建一个新版本的Retrofit.Builder实例构建器。 因为我们正在为请求重新使用构建器,如果我们不创建一个新的实例，所有的请求仍然会违反原来的apiBaseUrl值。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%BC%96%E7%A8%8B/" class="print-no-link">#编程</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>rest API客户端实现之Retrofit</div>
+      <div>http://inner.icu/2024/07/01/API客户端实现之Retrofit/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Linus Jhon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年7月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/08/01/%E8%99%9A%E6%8B%9F%E6%9C%BALinux%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9/" title="虚拟机Linux磁盘扩容">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">虚拟机Linux磁盘扩容</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/07/01/wordpress%E5%BB%BA%E7%AB%99/" title="外贸建站：WordPress搭建外贸独立站零基础自建站完整教程（2024）">
+                        <span class="hidden-mobile">外贸建站：WordPress搭建外贸独立站零基础自建站完整教程（2024）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://jump.inner.icu" target="_blank" rel="nofollow noopener"><span>JumpServer</span></a> <i class="iconfont icon-love"></i> <a href="https://img.inner.icu" target="_blank" rel="nofollow noopener"><span>IMG-OSS</span></a> <i class="iconfont icon-love"></i> <a href="https://alist.inner.icu" target="_blank" rel="nofollow noopener"><span>Alist</span></a> <i class="iconfont icon-love"></i> <a href="https://pdf.inner.icu" target="_blank" rel="nofollow noopener"><span>PDF-Tools</span></a>
+
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
